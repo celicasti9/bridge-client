@@ -11,7 +11,6 @@ function Profile() {
   const navigate = useNavigate();
   const { storeToken, authenticateUser } = useContext(AuthContext);
 
-  const SERVER_URL = "http://localhost:4000";
 
   return (
     <>

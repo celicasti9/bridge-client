@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
-
 import { SERVER_URL } from '../services/SERVER_URL'
 
 function EditExpense() {

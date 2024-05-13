@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from '../context/auth.context';
 import { fileChange } from '../services/fileChange';
 import { useContext } from 'react';
+import {SERVER_URL} from "../services/SERVER_URL"
 
 function ExpensesPage() {
     const [amount, setAmount] = useState("");
@@ -25,7 +26,7 @@ function ExpensesPage() {
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get('http://localhost:4000/categories');
+            const response = await axios.get(`${SERVER_URL}/categories`);
             setCategories(response.data);
         } catch (error) {
             console.error("Error fetching categories:", error);
@@ -35,7 +36,7 @@ function ExpensesPage() {
     const handleSubmit = (e) => {
         e.preventDefault();
         const requestBody = { amount, date, title, category: selectedCategory, description };
-        axios.post('http://localhost:4000/expenses', requestBody)
+        axios.post(`${SERVER_URL}/expenses`, requestBody)
           .then((response) => {
             navigate("/dashboard");
           })

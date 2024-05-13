@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
-const SERVER_URL = "http://localhost:4000";
+import {SERVER_URL} from "../services/SERVER_URL"
 
 function DeleteExpense(props) {
   const [amount, setAmount] = useState("");

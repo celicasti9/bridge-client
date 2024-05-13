@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
+import {SERVER_URL} from "../services/SERVER_URL"
+import { AuthContext } from '../context/auth.context';
 
 function ResetPassword() {
+    const { user } = useContext(AuthContext);
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [passwordStrength, setPasswordStrength] = useState('');
     const [message, setMessage] = useState('');
 
-    const SERVER_URL = "http://localhost:4000"; // Update with your actual server URL
 
     const calculatePasswordStrength = (password) => {
         const length = password.length;
@@ -37,7 +39,7 @@ function ResetPassword() {
             setMessage('Please set a stronger password.');
             return;
         }
-        axios.post(`${SERVER_URL}/auth/reset-password`, { password })
+        axios.put(`${SERVER_URL}/users/update/${user._id}`, { password })
             .then(response => {
                 setMessage('Password updated successfully!');
             })

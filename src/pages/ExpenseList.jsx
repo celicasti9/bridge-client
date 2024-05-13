@@ -4,9 +4,7 @@ import axios from 'axios';
 import ExpenseCard from '../components/ExpenseCard';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-
-
-const SERVER_URL = "http://localhost:4000";
+import {SERVER_URL} from "../services/SERVER_URL"
 
 function ExpenseList() {
     const [expenses, setExpenses] = useState([]);

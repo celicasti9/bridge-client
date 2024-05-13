@@ -3,9 +3,8 @@ import Sidebar from '../components/Sidebar';
 import axios from 'axios';
 import { Doughnut, Line } from 'react-chartjs-2';
 import 'chart.js/auto';
+import {SERVER_URL} from "../services/SERVER_URL"
 
-
-const SERVER_URL = "http://localhost:4000";
 
 function DashboardPage() {
     const [expenses, setExpenses] = useState([]);

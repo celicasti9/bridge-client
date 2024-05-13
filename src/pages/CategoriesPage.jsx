@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
+import {SERVER_URL} from "../services/SERVER_URL"
 
 function CategoriesPage() {
     const [newCategory, setNewCategory] = useState({ name: '' });
@@ -9,7 +10,7 @@ function CategoriesPage() {
     const [categories, setCategories] = useState([]);
     const navigate = useNavigate();
 
-    const SERVER_URL = "http://localhost:4000";
+    
 
     const getCategories = () => {
         axios.get(`${SERVER_URL}/categories`)

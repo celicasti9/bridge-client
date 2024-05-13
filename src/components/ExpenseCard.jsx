@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Link } from "react-router-dom";
 
 function ExpenseCard({ title, description, id, date, category, amount, handleDeleteClick }) {
-  const SERVER_URL = "http://localhost:4000";
+
 
   const handleDelete = () => {
     handleDeleteClick()
