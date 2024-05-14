@@ -5,7 +5,6 @@ import Sidebar from '../components/Sidebar';
 import { Link } from "react-router-dom";
 import { fileChange } from '../services/fileChange';
 import {SERVER_URL} from "../services/SERVER_URL"
-import { fileChange } from '../services/fileChange';
 
 function ExpensesPage() {
     const [amount, setAmount] = useState("");
