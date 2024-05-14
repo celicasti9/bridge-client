@@ -31,16 +31,6 @@ function ExpensesPage() {
         }
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const requestBody = { amount, date, title, category: selectedCategory, description, receipt };
-        axios.post(`${SERVER_URL}/expenses`, requestBody)
-          .then((response) => {
-            navigate("/dashboard");
-          })
-          .catch((error) => console.log(error));
-    };
-
     const handleImageChange = (e) => {
 
         setDisabled(true)
@@ -56,6 +46,17 @@ function ExpensesPage() {
           })
     
       };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const requestBody = { amount, date, title, category: selectedCategory, description, receipt };
+        axios.post(`${SERVER_URL}/expenses`, requestBody)
+          .then((response) => {
+            navigate("/dashboard");
+          })
+          .catch((error) => console.log(error));
+    };
+
 
     return (
         <>
