@@ -5,8 +5,10 @@ import Sidebar from '../components/Sidebar';
 import { Link } from "react-router-dom";
 import { fileChange } from '../services/fileChange';
 import {SERVER_URL} from "../services/SERVER_URL"
+import { AuthContext } from '../context/auth.context';
 
 function ExpensesPage() {
+    const { user } = useContext(AuthContext);
     const [amount, setAmount] = useState("");
     const [title, setTitle] = useState("");
     const [date, setDate] = useState("");
@@ -14,13 +16,31 @@ function ExpensesPage() {
     const [description, setDescription] = useState("");
     const [receipt, setReceipt] = useState(null); 
     const [categories, setCategories] = useState([]);
-    const [avatarUrl, setAvatarUrl] = useState('');
+    const [receiptUrl, setReceiptUrl] = useState('');
     const navigate = useNavigate();
     const [disabled, setDisabled] = useState(false)
 
-    useEffect(() => {
+    const fetchUserData = async () => {
+        try {
+          const response = await axios.get(`${SERVER_URL}/users/${user._id}`);
+        
+          const userData = response.data;
+          console.log("this is the user data", userData)
+          if (userData.avatar) {
+            setReceiptUrl(userData.avatar); // Set avatar URL for image preview
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      
+      useEffect(() => {
         fetchCategories();
-    }, []);
+        if (user) {
+          fetchUserData();
+        }
+      }, [user]);
+
 
     const fetchCategories = async () => {
         try {
@@ -34,16 +54,14 @@ function ExpensesPage() {
     const handleImageChange = (e) => {
 
         setDisabled(true)
-    
-        fileChange(e)
-          .then((response) => {
-            setAvatarUrl(response.data.image)
-            setDisabled(false)
-          })
-          .catch((err) => {
-            console.log("Errror uploading photo", err)
-            setDisabled(false)
-          })
+
+        let newPhoto
+
+        if (receiptUrl) {
+        newPhoto = receiptUrl
+        }    else {
+        newPhoto = user.avatar
+        }
     
       };
 
