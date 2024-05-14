@@ -3,12 +3,12 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import { Link } from "react-router-dom";
-import { fileChange } from '../services/fileChange';
-import {SERVER_URL} from "../services/SERVER_URL"
 import { AuthContext } from '../context/auth.context';
+import { fileChange } from '../services/fileChange';
+import { useContext } from 'react';
+import {SERVER_URL} from "../services/SERVER_URL"
 
 function ExpensesPage() {
-    const { user } = useContext(AuthContext);
     const [amount, setAmount] = useState("");
     const [title, setTitle] = useState("");
     const [date, setDate] = useState("");
@@ -16,31 +16,13 @@ function ExpensesPage() {
     const [description, setDescription] = useState("");
     const [receipt, setReceipt] = useState(null); 
     const [categories, setCategories] = useState([]);
-    const [receiptUrl, setReceiptUrl] = useState('');
+    const [avatarUrl, setAvatarUrl] = useState('');
     const navigate = useNavigate();
-    const [disabled, setDisabled] = useState(false)
+    const { user, isLoggedIn } = useContext(AuthContext);
 
-    const fetchUserData = async () => {
-        try {
-          const response = await axios.get(`${SERVER_URL}/users/${user._id}`);
-        
-          const userData = response.data;
-          console.log("this is the user data", userData)
-          if (userData.avatar) {
-            setReceiptUrl(userData.avatar); // Set avatar URL for image preview
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      
-      useEffect(() => {
+    useEffect(() => {
         fetchCategories();
-        if (user) {
-          fetchUserData();
-        }
-      }, [user]);
-
+    }, []);
 
     const fetchCategories = async () => {
         try {
@@ -51,23 +33,9 @@ function ExpensesPage() {
         }
     };
 
-    const handleImageChange = (e) => {
-
-        setDisabled(true)
-
-        let newPhoto
-
-        if (receiptUrl) {
-        newPhoto = receiptUrl
-        }    else {
-        newPhoto = user.avatar
-        }
-    
-      };
-
     const handleSubmit = (e) => {
         e.preventDefault();
-        const requestBody = { amount, date, title, category: selectedCategory, description, receipt };
+        const requestBody = { amount, date, title, category: selectedCategory, description };
         axios.post(`${SERVER_URL}/expenses`, requestBody)
           .then((response) => {
             navigate("/dashboard");
@@ -75,6 +43,9 @@ function ExpensesPage() {
           .catch((error) => console.log(error));
     };
 
+    const handleFileChange = (e) => {
+        setReceipt(e.target.files[0]); // Update the state with the selected file
+    };
 
     return (
         <>
@@ -152,11 +123,11 @@ function ExpensesPage() {
                             id="receipt"
                             name="receipt"
                             accept="image/*,.pdf" // Accept images and PDF files
-                            onChange={handleImageChange}
+                            onChange={handleFileChange}
                             className="mt-1 focus:ring-light-blue-500 focus:border-light-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                         />
                     </div>
-                    <button disabled={disabled} type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit Expense</button>
+                    <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit Expense</button>
                     <Link to="/list">
                         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             View Expenses
