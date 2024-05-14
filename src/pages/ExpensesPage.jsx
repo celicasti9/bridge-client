@@ -35,7 +35,7 @@ function ExpensesPage() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const requestBody = { amount, date, title, category: selectedCategory, description };
+        const requestBody = { amount, date, title, category: selectedCategory, description, receipt };
         axios.post(`${SERVER_URL}/expenses`, requestBody)
           .then((response) => {
             navigate("/dashboard");
