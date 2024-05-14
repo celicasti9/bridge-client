@@ -3,10 +3,9 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import { Link } from "react-router-dom";
-import { AuthContext } from '../context/auth.context';
 import { fileChange } from '../services/fileChange';
-import { useContext } from 'react';
 import {SERVER_URL} from "../services/SERVER_URL"
+import { fileChange } from '../services/fileChange';
 
 function ExpensesPage() {
     const [amount, setAmount] = useState("");
@@ -18,7 +17,7 @@ function ExpensesPage() {
     const [categories, setCategories] = useState([]);
     const [avatarUrl, setAvatarUrl] = useState('');
     const navigate = useNavigate();
-    const { user, isLoggedIn } = useContext(AuthContext);
+    const [disabled, setDisabled] = useState(false)
 
     useEffect(() => {
         fetchCategories();
@@ -43,9 +42,21 @@ function ExpensesPage() {
           .catch((error) => console.log(error));
     };
 
-    const handleFileChange = (e) => {
-        setReceipt(e.target.files[0]); // Update the state with the selected file
-    };
+    const handleImageChange = (e) => {
+
+        setDisabled(true)
+    
+        fileChange(e)
+          .then((response) => {
+            setAvatarUrl(response.data.image)
+            setDisabled(false)
+          })
+          .catch((err) => {
+            console.log("Errror uploading photo", err)
+            setDisabled(false)
+          })
+    
+      };
 
     return (
         <>
@@ -123,11 +134,11 @@ function ExpensesPage() {
                             id="receipt"
                             name="receipt"
                             accept="image/*,.pdf" // Accept images and PDF files
-                            onChange={handleFileChange}
+                            onChange={handleImageChange}
                             className="mt-1 focus:ring-light-blue-500 focus:border-light-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                         />
                     </div>
-                    <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit Expense</button>
+                    <button disabled={disabled} type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit Expense</button>
                     <Link to="/list">
                         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             View Expenses
