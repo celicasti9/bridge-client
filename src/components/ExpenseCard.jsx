@@ -1,15 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { Link } from "react-router-dom";
+import Modal from './Modal';  // Import the Modal component
 
 import { returnTimeShort } from '../services/time'
 
 function ExpenseCard({ title, description, id, date, category, amount, handleDeleteClick, receipt }) {
 
 
+  const [showModal, setShowModal] = useState(false);
+
   const handleDelete = () => {
     handleDeleteClick()
   };
+
+  const toggleModal = () => setShowModal(!showModal);
 
   return (
     <div className="flex flex-col bg-white rounded-lg shadow-lg overflow-hidden">
@@ -22,11 +27,19 @@ function ExpenseCard({ title, description, id, date, category, amount, handleDel
         <p className="text-sm text-gray-600 mb-2">Amount: {amount}</p>
         <p className="text-sm text-gray-600 mb-2">Date: {returnTimeShort(date)}</p>
         <p className="text-sm text-gray-700 mb-4">Description: {description}</p>
-        {receipt && receipt.endsWith('.pdf') ? (
-          <a href={receipt} target="_blank" rel="noopener noreferrer">View Receipt</a>
-        ) : (
-          <img src={receipt} alt="Receipt" className="w-full mb-2"/>
+        {receipt && (
+          <button onClick={toggleModal} className="text-blue-500 hover:text-blue-700">
+            View Receipt
+          </button>
         )}
+
+        <Modal isOpen={showModal} onClose={toggleModal}>
+          {receipt && receipt.endsWith('.pdf') ? (
+            <iframe src={receipt} frameBorder="0" style={{ width: '100%', height: '500px' }}></iframe>
+          ) : (
+            <img src={receipt} alt="Receipt" style={{ maxWidth: '100%' }}/>
+          )}
+        </Modal>
         <div className="flex justify-between">
           <button type="submit" onClick={handleDelete} className="text-red-500 hover:text-red-700">
             Delete
