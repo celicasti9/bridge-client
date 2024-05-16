@@ -2,7 +2,9 @@ import React from 'react';
 import axios from 'axios';
 import { Link } from "react-router-dom";
 
-function ExpenseCard({ title, description, id, date, category, amount, handleDeleteClick }) {
+import { returnTimeShort } from '../services/time'
+
+function ExpenseCard({ title, description, id, date, category, amount, handleDeleteClick, receipt }) {
 
 
   const handleDelete = () => {
@@ -18,8 +20,13 @@ function ExpenseCard({ title, description, id, date, category, amount, handleDel
         <h3 className="text-xl font-semibold text-gray-800 mb-2">{title}</h3>
         <p className="text-sm text-gray-600 mb-2">Category: {category}</p>
         <p className="text-sm text-gray-600 mb-2">Amount: {amount}</p>
-        <p className="text-sm text-gray-600 mb-2">Date: {date}</p>
+        <p className="text-sm text-gray-600 mb-2">Date: {returnTimeShort(date)}</p>
         <p className="text-sm text-gray-700 mb-4">Description: {description}</p>
+        {receipt && receipt.endsWith('.pdf') ? (
+          <a href={receipt} target="_blank" rel="noopener noreferrer">View Receipt</a>
+        ) : (
+          <img src={receipt} alt="Receipt" className="w-full mb-2"/>
+        )}
         <div className="flex justify-between">
           <button type="submit" onClick={handleDelete} className="text-red-500 hover:text-red-700">
             Delete

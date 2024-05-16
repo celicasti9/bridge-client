@@ -129,6 +129,7 @@ function ExpenseList() {
                                 date={expense.date}
                                 amount={expense.amount}
                                 category={expense.category}
+                                receipt={expense.receipt}
                                 handleDeleteClick={() => handleDeleteClick(expense._id)}
                             />
                         </div>

@@ -1,14 +1,19 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, } from 'react';
+import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios';
-import {SERVER_URL} from "../services/SERVER_URL"
+import { SERVER_URL } from "../services/SERVER_URL"
 import { AuthContext } from '../context/auth.context';
 
 function ResetPassword() {
-    const { user } = useContext(AuthContext);
+    // const { user } = useContext(AuthContext);
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [passwordStrength, setPasswordStrength] = useState('');
     const [message, setMessage] = useState('');
+
+    const { userId } = useParams()
+
+    const navigate = useNavigate()
 
 
     const calculatePasswordStrength = (password) => {
@@ -39,9 +44,13 @@ function ResetPassword() {
             setMessage('Please set a stronger password.');
             return;
         }
-        axios.put(`${SERVER_URL}/users/update/${user._id}`, { password })
+        axios.put(`${SERVER_URL}/users/reset-password/${userId}`, { password })
             .then(response => {
+                console.log("This is the updated user", response.data)
                 setMessage('Password updated successfully!');
+                setTimeout(() => {
+                    navigate('/login')
+                }, 3000)
             })
             .catch(error => {
                 setMessage('Failed to update password.');
